@@ -118,6 +118,17 @@ pair<string, vector<vector<ProductionParser::ProductionPart>>> ProductionParser:
             part.push_back(nonTerminal);
             rhs = "";
         }
+        else if (production[i] == '\\' && production[++i] == 'L')
+        {
+             if (rhs.size() > 0)
+            {
+                ProductionPart nonTerminal(rhs, false);
+                part.push_back(nonTerminal);
+                rhs = "";
+            }
+            ProductionPart nonTerminal("#", false);
+            part.push_back(nonTerminal);
+        }
         else if (production[i] != ' ')
         {
             rhs += production[i];
