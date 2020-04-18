@@ -1,0 +1,24 @@
+example(1)
+# C = P F 'class' 'id' X Y
+# P = 'public' | '#'
+# F = 'final' | '#'
+# X =  'extends' 'id' | '#'
+# Y = 'implements' I | '#'
+# I = 'id' J
+# J = ',' I | '#'
+
+example(2)
+# prog = stmt
+# stmt = 'if' expr 'then' block |'while' expr 'do' block | expr
+# expr = term '=>' 'id' | 'isZero?' term | 'not' expr | '++' id | '--' id
+# term = 'id' | 'const'
+# block = stmt | '{' stmts '}'
+# stmts = stmt stmts | '#'
+
+example(3)
+# prog = stmt
+# stmt = 'if' expr 'then' block |'while' expr 'do' block | expr ';'
+# expr = term '=>' 'id' | 'isZero?' term | 'not' expr | '++' 'id' | '--' 'id'
+# term = 'id' | 'const'
+# block = stmt | '{' stmts '}'
+# stmts = stmt stmts | '#'

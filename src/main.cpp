@@ -5,28 +5,37 @@
 #include <string>
 #include <map>
 using namespace std;
-#include "productionsParser.h"
-
+#include "parser_table.cpp"
 int main()
 {
     string filePath;
     cout << "Enter The path of the file containing production rules: "<< endl;
     getline(cin,filePath);
-    map<string, vector<vector<ProductionParser::ProductionPart>>> productions = ProductionParser::parseProductionRuls(filePath);
+    parser_table::productions = ProductionParser::parseProductionRuls(filePath);
     int num = 0;
-    for(auto p:productions){
+    cout << "number of productions: " << num<<endl;
+    parser_table::calculate_first_set();
+    parser_table::calculate_follow_set();
+    for(auto p:parser_table::first_set){
         cout << "LHS:"<<p.first<<endl;
-        num++;
         for (auto i : p.second)
         {
-            for (auto j : i)
-            {
-                cout << j.name << " ";
-            }
-            cout << "\n";
+                cout << i << " ";
+
         }
+         cout << "\n";
         cout << "--------------------\n" <<endl;
     }
-    cout << "number of productions: " << num<<endl;
+    cout << "#####################################\n" ;
+    for(auto p:parser_table::follow_set){
+        cout << "LHS:"<<p.first<<endl;
+        for (auto i : p.second)
+        {
+                cout << i << " ";
+
+        }
+         cout << "\n";
+        cout << "--------------------\n" <<endl;
+    }
     return 0;
 }
