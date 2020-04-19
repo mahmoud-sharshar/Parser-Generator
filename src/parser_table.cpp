@@ -2,7 +2,16 @@
 
 using namespace std ;
 
-set<string> parser_table::calculate_first(string symbol , bool terminal)
+// constructor
+Parsing_table::Parsing_table(string input_file){
+    this->parser = parser ;
+    this->input_file = input_file;
+    this->parser = new ProductionParser(input_file);
+    this->productions = parser->getProductions();
+    this->start_symbol = parser->getStartProduction();
+}
+
+set<string> Parsing_table::calculate_first(string symbol , bool terminal)
 {
     set<string> new_first_set ;
     // case one : terminal symbol
@@ -14,8 +23,8 @@ set<string> parser_table::calculate_first(string symbol , bool terminal)
     }
 
     // case two : non terminal symbol
-    vector< vector< ProductionParser::ProductionPart> > production ;
-    production = productions[symbol] ;
+    vector< vector<ProductionPart> > production ;
+    production = this->productions[symbol] ;
     int epison_size = 0 ;
     for(auto rule:production){
         bool is_epsion = true ;
@@ -46,19 +55,19 @@ set<string> parser_table::calculate_first(string symbol , bool terminal)
     return new_first_set ;
 }
 
-void parser_table::calculate_first_set(){
-    for (auto non_terminal:parser_table::productions){
+void Parsing_table::calculate_first_set(){
+    for (auto non_terminal:this->productions){
         if(first_set.find(non_terminal.first)==first_set.end()){
                 calculate_first(non_terminal.first,false);
         }
     }
 }
 
-void parser_table::calculate_follow_set(){
+void Parsing_table::calculate_follow_set(){
     //case 1 : start symbol
-    follow_set["G"].insert("$");
+    follow_set[start_symbol].insert("$");
     // case 2 : first set of adjacent symbol is in the follow set of the left non terminal
-    for (auto production:parser_table::productions){
+    for (auto production:this->productions){
        // cout << "\n" << production.first << " :: \n" ;
         for(auto rule:production.second){
             int len = rule.size();
@@ -93,7 +102,7 @@ void parser_table::calculate_follow_set(){
     }
 
     // case 3 : everything in follow set of LHS is in the follow set of the last symbol in RHS
-    for(auto production: parser_table::productions){
+    for(auto production: Parsing_table::productions){
         set<string> old_follow_set = follow_set[production.first];
         for(auto rule:production.second){
             bool is_epison = true ;
@@ -114,13 +123,13 @@ void parser_table::calculate_follow_set(){
 
 }
 
-void parser_table::construct_parsing_table(){
+void Parsing_table::construct_Parsing_table(){
 
 
-    parser_table::calculate_first_set();
-    parser_table::calculate_follow_set();
+    this->calculate_first_set();
+    this->calculate_follow_set();
 
-    for(auto production:parser_table::productions){
+    for(auto production:Parsing_table::productions){
         string non_terminal = production.first;
         for(auto rule:production.second){
             bool is_epison = true;
@@ -131,7 +140,7 @@ void parser_table::construct_parsing_table(){
                 string symbol = part.name;
                 set<string> first = first_set[symbol];
                 for(auto terminal:first){
-                    if(terminal!="#")parser_table::parsing_table[{non_terminal,terminal}] = rule;
+                    if(terminal!="#")this->parse_table[{non_terminal,terminal}] = rule;
                 }
                 is_epison = false;
                 if(first.count("#")) {
@@ -143,9 +152,13 @@ void parser_table::construct_parsing_table(){
           if(epison){
                 set<string> follow = follow_set[non_terminal];
                 for(auto terminal:follow){
-                    parser_table::parsing_table[{non_terminal,terminal}] = rule;
+                    this->parse_table[{non_terminal,terminal}] = rule;
                 }
           }
         }
     }
 }
+ unordered_map< pair<string,string> , vector<ProductionPart> , hash_pair> Parsing_table::get_parsing_table(){
+     this->construct_Parsing_table();
+     return this->parse_table;
+ }

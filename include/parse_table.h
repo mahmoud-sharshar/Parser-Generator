@@ -17,14 +17,23 @@ struct hash_pair {
     }
 };
 
-namespace parser_table{
-map<string, vector<vector<ProductionParser::ProductionPart>>> productions ;
-unordered_map<string, set<string> > first_set ;
-unordered_map<string, set<string> > follow_set ;
-unordered_map< pair<string,string> , vector<ProductionParser::ProductionPart> , hash_pair> parsing_table;
-set<string> calculate_first(string symbol , bool terminal);
-void calculate_first_set();
-void calculate_follow_set();
-void construct_parsing_table();
+class Parsing_table{
+    private:
+        unordered_map<string, set<string> > first_set ;
+        unordered_map<string, set<string> > follow_set ;
+        unordered_map< pair<string,string> , vector<ProductionPart> , hash_pair> parse_table;
+        map<string,vector<vector<ProductionPart>>> productions;
+        string input_file ;
+        ProductionParser* parser;
+        string start_symbol ;
+        set<string> calculate_first(string symbol , bool terminal);
+        void calculate_first_set();
+        void calculate_follow_set();
+        void construct_Parsing_table();
+
+    public:
+        Parsing_table();
+        Parsing_table(string input_file);
+        unordered_map< pair<string,string> , vector<ProductionPart> , hash_pair> get_parsing_table();
 };
 #endif // PARSE_TABLE_H_INCLUDED

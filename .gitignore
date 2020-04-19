@@ -3,5 +3,5 @@ build
 .cbp
 CMakeCache.txt
 cmake_install.cmake
-Makefile
+Makefile.txt
 .layout

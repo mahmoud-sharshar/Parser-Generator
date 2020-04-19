@@ -5,19 +5,30 @@
 #include <string>
 #include <map>
 
-namespace ProductionParser
-{
 struct ProductionPart
 {
     std::string name{""};
     bool terminal{false};
     ProductionPart(std::string name, bool t);
 };
-std::vector<std::string> findRules(std::string filePath);
-bool validateProductionStructure(std::string production);
-std::pair<std::string, std::vector<std::vector<ProductionPart>>> findProductionParts(std::string production);
-std::map<std::string, std::vector<std::vector<ProductionPart>>> parseProductionRuls(std::string filePath);
 
-}; // namespace ProductionParser
+class ProductionParser
+{
+private:
+    std::string filePath;
+    std::string startProduction;
+    std::map<std::string, std::vector<std::vector<ProductionPart>>> productions;
+    std::vector<std::string> productionsRules;
+    void parseProductionRuls();
+    void findRules();
+public:
+    ProductionParser();
+    ProductionParser(std::string filePath);
+    std::pair<std::string, std::vector<std::vector<ProductionPart>>> findProductionParts(std::string production);
+    bool validateProductionStructure(std::string production);
+
+    std::map<std::string, std::vector<std::vector<ProductionPart>>> getProductions(){return productions;}
+    std::string getStartProduction(){return startProduction;}
+};
 
 #endif
