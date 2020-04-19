@@ -13,20 +13,26 @@ using std::pair;
 using std::string;
 using std::vector;
 
-vector<string> ProductionParser::findRules(string filePath)
+
+ProductionParser::ProductionParser(std::string file)
+{
+    this->filePath = file;
+    findRules();
+    parseProductionRuls();
+}
+void ProductionParser::findRules()
 {
     ifstream file(filePath);
     string line;
-    vector<string> productions;
     if (file.is_open())
     {
         while (getline(file, line))
         {
             if (line[line.find_first_not_of(' ')] == '#')
-                productions.push_back(line);
+                productionsRules.push_back(line);
             else if (productions.size() > 0)
             {
-                productions[productions.size() - 1] += " " + line;
+                productionsRules[productionsRules.size() - 1] += " " + line;
             }
             else
             {
@@ -39,7 +45,6 @@ vector<string> ProductionParser::findRules(string filePath)
     {
         std::cout << "Enter valid file path" << std::endl;
     }
-    return productions;
 }
 
 bool ProductionParser::validateProductionStructure(string production)
@@ -51,13 +56,13 @@ bool ProductionParser::validateProductionStructure(string production)
     return true;
 }
 
-ProductionParser::ProductionPart::ProductionPart(string name, bool t)
+ProductionPart::ProductionPart(string name, bool t)
 {
     this->name = name;
     this->terminal = t;
 }
 
-pair<string, vector<vector<ProductionParser::ProductionPart>>> ProductionParser::findProductionParts(string production)
+pair<string, vector<vector<ProductionPart>>> ProductionParser::findProductionParts(string production)
 {
     string lhs = "";
     string rhs = "";
@@ -118,6 +123,17 @@ pair<string, vector<vector<ProductionParser::ProductionPart>>> ProductionParser:
             part.push_back(nonTerminal);
             rhs = "";
         }
+        else if (production[i] == '\\' && production[++i] == 'L')
+        {
+             if (rhs.size() > 0)
+            {
+                ProductionPart nonTerminal(rhs, false);
+                part.push_back(nonTerminal);
+                rhs = "";
+            }
+            ProductionPart nonTerminal("#", false);
+            part.push_back(nonTerminal);
+        }
         else if (production[i] != ' ')
         {
             rhs += production[i];
@@ -137,16 +153,18 @@ pair<string, vector<vector<ProductionParser::ProductionPart>>> ProductionParser:
     return {lhs, RHSparts};
 }
 
-map<string, vector<vector<ProductionParser::ProductionPart>>> ProductionParser::parseProductionRuls(string filePath)
+void ProductionParser::parseProductionRuls()
 {
-    vector<string> productionsRules = findRules(filePath);
-    map<string, vector<vector<ProductionPart>>> productions;
+    bool first = false;
     if (productionsRules.size() > 0)
     {
         for (auto production : productionsRules)
         {
             productions.insert(findProductionParts(production));
+            if(!first){
+                first = true;
+                startProduction = productions.begin()->first;
+            }
         }
     }
-    return productions;
 }
