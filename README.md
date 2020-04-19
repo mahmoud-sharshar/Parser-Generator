@@ -62,7 +62,20 @@ parser
     - use `ProductionParser::parseProductionRuls({filePath})`:
         - It takes a valid input file path.
         - return a map that containing production name as a key and production parts as 2D array where each row represents a collection of concatenating parts of the production and `or` operation must be performed on all rows. 
-
+#### Construction parsing table
+ - two main files:
+    - [`parser_table.cpp`](./src/parser_table.cpp)
+    - [`parse_table.h`](./include/parse_table.h)
+        
+ - to construct a paring table for a file:
+    - import `parse_table.h` in the source file.
+    - make an object from parsing_table class which take the file path of the input file.
+    - use `Parsing_table::get_parsing_table()`:
+      - return a map its key is a pair of non terminal and terminal its value is a vector of production part which          represent the prodcution rule for this entry of the paring table.
+        
+### Assumptions 
+ - input rules are left recursion eliminated and left factored
+ - "#" represent epsilon in the parsing table
 
 ### Hints
 - All source files must be in `src` folder.
