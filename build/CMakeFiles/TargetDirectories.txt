@@ -1,3 +1,0 @@
-E:/Parser generator/build/CMakeFiles/parser.dir
-E:/Parser generator/build/CMakeFiles/edit_cache.dir
-E:/Parser generator/build/CMakeFiles/rebuild_cache.dir
