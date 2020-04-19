@@ -22,3 +22,16 @@ example(3)
 # term = 'id' | 'const'
 # block = stmt | '{' stmts '}'
 # stmts = stmt stmts | '#'
+
+example(4)
+# E = T ED
+# ED = '+' T ED | '#'
+# T = F TD
+# TD = '*' F TD | '#'
+# F = 'id' | '(' E ')'
+
+example(5)
+# S = A
+# A = 'a' B | A 'd'
+# B = bBC | 'f'
+# C = 'g'

@@ -56,7 +56,7 @@ void parser_table::calculate_first_set(){
 
 void parser_table::calculate_follow_set(){
     //case 1 : start symbol
-    follow_set["S"].insert("$");
+    follow_set["G"].insert("$");
     // case 2 : first set of adjacent symbol is in the follow set of the left non terminal
     for (auto production:parser_table::productions){
        // cout << "\n" << production.first << " :: \n" ;
@@ -112,4 +112,40 @@ void parser_table::calculate_follow_set(){
         }
     }
 
+}
+
+void parser_table::construct_parsing_table(){
+
+
+    parser_table::calculate_first_set();
+    parser_table::calculate_follow_set();
+
+    for(auto production:parser_table::productions){
+        string non_terminal = production.first;
+        for(auto rule:production.second){
+            bool is_epison = true;
+            bool epison = false;
+            // case one using first set of the
+            for(auto part:rule){
+                if(!is_epison) break;
+                string symbol = part.name;
+                set<string> first = first_set[symbol];
+                for(auto terminal:first){
+                    if(terminal!="#")parser_table::parsing_table[{non_terminal,terminal}] = rule;
+                }
+                is_epison = false;
+                if(first.count("#")) {
+                    is_epison= true;
+                    epison = true;
+                }
+            }
+          // case two if first set contain # then using follow set
+          if(epison){
+                set<string> follow = follow_set[non_terminal];
+                for(auto terminal:follow){
+                    parser_table::parsing_table[{non_terminal,terminal}] = rule;
+                }
+          }
+        }
+    }
 }
