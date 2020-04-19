@@ -1,0 +1,48 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/parse_table.h
+string
+-
+unordered_map
+-
+set
+-
+map
+-
+vector
+-
+productionsParser.h
+../include/productionsParser.h
+
+../include/productionsParser.h
+vector
+-
+string
+-
+map
+-
+
+E:/Parser generator/src/main.cpp
+iostream
+-
+fstream
+-
+sstream
+-
+vector
+-
+string
+-
+map
+-
+productionsParser.h
+E:/Parser generator/src/productionsParser.h
+parse_table.h
+E:/Parser generator/src/parse_table.h
+

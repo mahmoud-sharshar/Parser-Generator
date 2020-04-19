@@ -30,7 +30,7 @@ void ProductionParser::findRules()
         {
             if (line[line.find_first_not_of(' ')] == '#')
                 productionsRules.push_back(line);
-            else if (productions.size() > 0)
+            else if (productionsRules.size() > 0)
             {
                 productionsRules[productionsRules.size() - 1] += " " + line;
             }
