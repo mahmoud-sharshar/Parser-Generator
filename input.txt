@@ -1,4 +1,5 @@
-# G = S '@'
-# S = '(' L ')' | 'a'
-# L = S LD
-# LD = ',' S LD | '#'
+# E = T ED
+# ED = '+' T ED | '#'
+# T = F TD
+# TD = '*' F TD | '#'
+# F = '(' E ')' | 'id'
