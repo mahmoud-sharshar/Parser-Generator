@@ -6,10 +6,12 @@
 #include <map>
 using namespace std;
 #include "parser_table.cpp"
+#include "REToNFA.cpp"
+#include "anaylser.cpp"
 int main()
 {
     string filePath;
-    cout << "Enter The path of the file containing production rules: "<< endl;
+    /*cout << "Enter The path of the file containing production rules: "<< endl;
     getline(cin,filePath);
     Parsing_table parser_table(filePath);
     for(auto p:parser_table.productions){
@@ -23,6 +25,8 @@ int main()
             cout << "\n";
         }
         cout << "--------------------\n" <<endl;
-    }
+    }*/
+	NFA* nfa = generateNFA(filePath);
+	
     return 0;
 }
