@@ -9,6 +9,7 @@ Parsing_table::Parsing_table(string input_file){
     this->parser = new ProductionParser(input_file);
     this->productions = parser->getProductions();
     this->start_symbol = parser->getStartProduction();
+    // this->eliminate_left_recursion();
 }
 
 set<string> Parsing_table::calculate_first(string symbol , bool terminal)
@@ -123,8 +124,62 @@ void Parsing_table::calculate_follow_set(){
 
 }
 
-void Parsing_table::construct_Parsing_table(){
+void Parsing_table::eliminate_left_recursion(){
 
+    map<string , vector< vector<ProductionPart> > > new_productions;
+    unordered_map<string,bool> previous_symbols ;
+    for(auto production:productions){
+        cout << production.first << endl;
+        vector < vector<ProductionPart> > new_rules ;
+        for(auto rule:production.second){
+            if( previous_symbols.find(rule[0].name) != previous_symbols.end() ){
+                for(auto previous_rule: new_productions[rule[0].name]){
+                    vector<ProductionPart> new_rule = previous_rule;
+                    int len = rule.size();
+                    for(int i=1;i<len;i++){
+                        new_rule.push_back(rule[i]);
+                    }
+                    new_rules.push_back(new_rule);
+                }
+            }else{
+                new_rules.push_back(rule);
+            }
+        }
+        previous_symbols[production.first]=true;
+        // eliminate immediate left recursion
+       vector< vector<ProductionPart> >immediate;
+       vector< vector<ProductionPart> > non_immediate;
+        ProductionPart new_part(production.first + "D", false);
+        for(auto rule : new_rules){
+            if(rule[0].name == production.first){
+                immediate.push_back(rule);
+            }else{
+                non_immediate.push_back(rule);
+            }
+        }
+        // no immediate left recursion
+        if( immediate.size() == 0){
+            new_productions[production.first] = non_immediate;
+        }else{
+            for(auto &non:non_immediate){
+                non.push_back(new_part);
+            }
+            for(auto &immed: immediate){
+                immed.erase(immed.begin());
+                immed.push_back(new_part);
+            }
+            new_productions[production.first] = non_immediate;
+            vector<ProductionPart> epison_rule ;
+            ProductionPart epison_part("#", true);
+            epison_rule.push_back(epison_part);
+            immediate.push_back(epison_rule);
+            new_productions[production.first + "D"] = immediate;
+        }
+    }
+    productions = new_productions;
+}
+
+void Parsing_table::construct_Parsing_table(){
 
     this->calculate_first_set();
     this->calculate_follow_set();
@@ -155,6 +210,13 @@ void Parsing_table::construct_Parsing_table(){
                     this->parse_table[{non_terminal,terminal}] = rule;
                 }
           }
+        }
+    }
+
+    // calculate sync
+    for(auto production:productions){
+        for(auto terminal:follow_set[production.first]){
+            sync[{production.first,terminal}] = true ;
         }
     }
 }

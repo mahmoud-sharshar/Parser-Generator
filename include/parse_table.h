@@ -22,7 +22,7 @@ class Parsing_table{
         unordered_map<string, set<string> > first_set ;
         unordered_map<string, set<string> > follow_set ;
         unordered_map< pair<string,string> , vector<ProductionPart> , hash_pair> parse_table;
-        map<string,vector<vector<ProductionPart>>> productions;
+        unordered_map< pair<string,string> , bool , hash_pair > sync ;
         string input_file ;
         ProductionParser* parser;
         string start_symbol ;
@@ -30,10 +30,14 @@ class Parsing_table{
         void calculate_first_set();
         void calculate_follow_set();
         void construct_Parsing_table();
-
+        void eliminate_left_recursion();
+        void left_factoring();
     public:
         Parsing_table();
         Parsing_table(string input_file);
+        map<string,vector<vector<ProductionPart>>> productions;
         unordered_map< pair<string,string> , vector<ProductionPart> , hash_pair> get_parsing_table();
+        string get_start_symbol() {return start_symbol;}
+
 };
 #endif // PARSE_TABLE_H_INCLUDED
