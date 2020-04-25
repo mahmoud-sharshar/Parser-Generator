@@ -1,3 +1,5 @@
-# S = A 'a' | 'b'
-# A = A 'c' | S 'd' | 'f'
-
+# E = T ED
+# ED = '+' T ED | '#'
+# T = F TD
+# TD = '*' F TD | '#'
+# F = '(' E ')' | 'id'
