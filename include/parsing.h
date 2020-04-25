@@ -14,7 +14,7 @@ class Parsing_stack{
          void PrintStack(stack<stack_element> s) ;
 
     public:
-        Parsing_stack(Parsing_table* parser_table);
-        void stack_parser(Parsing_table* parser_table);
+        Parsing_stack(Parsing_table* parser_table,std::string fileName);
+        void stack_parser(Parsing_table* parser_table,std::string fileName);
 };
 #endif // PARSE_TABLE_H_INCLUDED

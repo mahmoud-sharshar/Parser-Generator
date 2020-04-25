@@ -151,8 +151,10 @@ int main()
     }
     cout <<"\n------------------------------------------------------------\n";
     cout << "stacking...."<<endl;
-    cout<<"reading"<<endl;
-    Parsing_stack stacking(&parser_table);
+    cout<<"reading start with"<<parser_table.start_symbol<<endl;
+	cout << "Enter The path of the file containing the tokens: "<< endl;
+    getline(cin,filePath);
+    Parsing_stack stacking(&parser_table,filePath);
     // stacking.stack_parser(&parser_table);
      return 0;
 }

@@ -3,8 +3,8 @@
 using namespace std ;
 
 // constructor
-Parsing_stack::Parsing_stack(Parsing_table* parser_table){
-   this->stack_parser(parser_table);
+Parsing_stack::Parsing_stack(Parsing_table* parser_table,std::string fileName){
+   this->stack_parser(parser_table,fileName);
 }
  bool Parsing_stack::getFileContent(std::string fileName, std::vector<std::string> & vecOfStrs)
  {
@@ -54,10 +54,10 @@ void Parsing_stack::PrintStack(stack<stack_element> s)
     // to preserve the order 
     s.push(x); 
 } 
-void Parsing_stack::stack_parser(Parsing_table* parser_table){ 
+void Parsing_stack::stack_parser(Parsing_table* parser_table,std::string fileName){ 
    stack<stack_element> mystack;
    std::vector<std::string> vecOfStr;
-	bool result = getFileContent("I:\\kimo project\\Parser-Generator\\data.txt", vecOfStr);
+	bool result = getFileContent(fileName, vecOfStr);
  
 	// if(result)
 	// {
@@ -70,7 +70,7 @@ void Parsing_stack::stack_parser(Parsing_table* parser_table){
     stack->terminal=true;
     mystack.push(*stack);
     stack  = new stack_element();
-    stack->name="E";
+    stack->name=parser_table->start_symbol;
     mystack.push(*stack);
     int counter=0;
      while(!mystack.empty()){
@@ -78,11 +78,14 @@ void Parsing_stack::stack_parser(Parsing_table* parser_table){
         mystack.pop();
         // cout<<v<<"    "<<vecOfStr[counter]<<endl;
         pair<string,string> p;
+        
         p.first = v.name;
         if(v.name != "#"){
         p.second = vecOfStr[counter];
         //cout<<"input is "<<vecOfStr[counter]<<endl;
         if(parser_table->sync[p] && parser_table->get_parsing_table().count(p)==0){
+            PrintStack(mystack);
+            cout<<endl;
             continue;
         }
         if(p.first==(p.second)){
@@ -93,14 +96,18 @@ void Parsing_stack::stack_parser(Parsing_table* parser_table){
             if(v.name == "$"){
             cout<<"error "<<vecOfStr[counter]<<"is extra token"<<endl;
             }
-        else
-            cout<<"error "<<vecOfStr[counter]<<"is extra token"<<endl;
-            counter++;
-            mystack.push(v);
+        else{
+            cout<<"error "<<v.name<<"is missing"<<endl;
+            if(counter<vecOfStr.size()-1)
+               {counter++;
+                 mystack.push(v);}
+            PrintStack(mystack);
+            cout<<endl;
             continue;
         }
+        }
         else if(parser_table->get_parsing_table().count(p)==0){
-            cout<<"Syntax error"<<endl;
+            cout<<"Syntax error"<<parser_table->get_parsing_table().count(p)<<endl;
             counter++;
             mystack.push(v);
         }
