@@ -72,6 +72,8 @@ void Parsing_stack::stack_parser(Parsing_table* parser_table,std::string fileNam
     stack  = new stack_element();
     stack->name=parser_table->start_symbol;
     mystack.push(*stack);
+	PrintStack(mystack);
+    cout<<endl;
     int counter=0;
      while(!mystack.empty()){
         stack_element v = mystack.top();
