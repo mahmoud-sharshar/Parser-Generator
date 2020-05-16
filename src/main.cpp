@@ -25,6 +25,7 @@ int main()
         }
         cout << "\n---------------------------\n";
     }
+    cout <<parser_table.get_parsing_table().size();
     cout <<"\n------------------------------------------------------------\n";
     cout << "stacking...."<<endl;
     cout<<"reading start with"<<parser_table.start_symbol<<endl;

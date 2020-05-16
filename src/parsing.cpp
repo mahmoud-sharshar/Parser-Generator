@@ -65,6 +65,7 @@ void Parsing_stack::stack_parser(Parsing_table* parser_table,std::string fileNam
 	// 	for(std::string & line : vecOfStr)
 	// 		std::cout<<line<<std::endl;
 	// }
+
     stack_element* stack = new stack_element();
     stack->name="$";
     stack->terminal=true;
@@ -80,17 +81,15 @@ void Parsing_stack::stack_parser(Parsing_table* parser_table,std::string fileNam
         mystack.pop();
         // cout<<v<<"    "<<vecOfStr[counter]<<endl;
         pair<string,string> p;
-        
         p.first = v.name;
         if(v.name != "#"){
         p.second = vecOfStr[counter];
         //cout<<"input is "<<vecOfStr[counter]<<endl;
         if(parser_table->sync[p] && parser_table->get_parsing_table().count(p)==0){
             PrintStack(mystack);
-            cout<<endl;
             continue;
         }
-        if(p.first==(p.second)){
+        if(p.first.compare((p.second))==0){
             counter++;
             cout<<"matched"<<endl;
         }
@@ -99,7 +98,7 @@ void Parsing_stack::stack_parser(Parsing_table* parser_table,std::string fileNam
             cout<<"error "<<vecOfStr[counter]<<"is extra token"<<endl;
             }
         else{
-            cout<<"error "<<v.name<<"is missing"<<endl;
+            cout<<"error "<<v.name<<" is missing"<<endl;
             if(counter<vecOfStr.size()-1)
                {counter++;
                  mystack.push(v);}
@@ -115,11 +114,15 @@ void Parsing_stack::stack_parser(Parsing_table* parser_table,std::string fileNam
         }
         else {
             std::vector<ProductionPart> myvector;
-            for (auto  x :parser_table->get_parsing_table()[p])
-            { 
-                  myvector.push_back(x);
-
+            vector<ProductionPart> xx =parser_table->get_parsing_table()[p];
+            // for(auto b:xx){
+            //     cout<<endl<<b.name;
+            // }
+            for (auto  x :xx)
+            {  
+                myvector.push_back(x);
             } 
+            // cout<<p.first<<"  "<<p.second<<endl;
             vector<ProductionPart>::iterator i = myvector.end();
             while (i != myvector.begin())
             {

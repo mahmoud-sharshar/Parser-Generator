@@ -10,7 +10,7 @@
 
 # PRIMITIVE_TYPE = 'int' | 'float'
 
-# IF = 'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}'
+# IF = 'if' '('EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}'
 
 # WHILE = 'while' '(' EXPRESSION ')' '{' STATEMENT '}'
 
